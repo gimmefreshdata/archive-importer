@@ -27,8 +27,15 @@ def doImport(archiveUrl) {
         sh "unzip tmp.zip -d dwca"
 
     stage 'verify'
-        if (!fileExists('dwca/meta.xml')) {
+        def metaFilename = 'dwca/meta.xml'
+        if (!fileExists(metaFilename)) {
             error("failed to find file [meta.xml] in ${archiveUrl}")
+        }
+        metaXmlString = readFile metaFilename
+        try {
+            new XmlSlurper().parseText(metaXmlString)
+        } catch (err) {
+            error("failed to parse meta.xml due to [${err}]")
         }
 
     stage 'dwc2parquet'
@@ -40,7 +47,7 @@ def doImport(archiveUrl) {
 
         if (conversionSuccess(submissionId)) {
             stage 'archive'
-                archive 'dwca/*'
+                archive 'dwca/**'
             stage 'link'
                 echo "should link to parquet files here"
             stage 'notify'
@@ -99,14 +106,13 @@ def getHost() {
 }
 
 def submissionStatus(submissionId) {
-    sh "curl http://${getHost()}:7077/v1/submissions/status/${submissionId} > ${submissionId}.status"
+    sh "curl http://${getHost()}:7077/v1/submissions/status/${submissionId} > submissionId.status"
     readFile "${submissionId}.status"
 }
 
 def conversionSuccess(submissionId) {
     try {
-        sh "curl --silent http://${getHost()}:7077/v1/submissions/status/${submissionId} > ${submissionId}.status"
-        def status = readFile "${submissionId}.status"
+        status = submissionStatus(submissionId)
         def taskFinishedMatcher = status =~ '.*(TASK_FINISHED).*'
         taskFinishedMatcher ? true : false
     } catch (err) {
