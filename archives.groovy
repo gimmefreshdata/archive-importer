@@ -80,7 +80,8 @@ def requestConversion() {
 def conversionComplete(submissionId) {
     try {
         status = submissionStatus(submissionId)
-        def driverStatusMatch = status =~ 'driverStatus"\\s+:\\s+"(RUNNING)"'
+        def driverStatusMatch = status =~ 'driverStatus"\\s+:\\s+"(FINISHED)"'
+        echo "checking status ${status}"
         driverStatusMatch ? true : false
     } catch (err) {
         echo "failure in parquet conversion: [${err}]"
