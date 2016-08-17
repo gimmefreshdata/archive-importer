@@ -20,6 +20,9 @@ def importIfChanged(archiveUrl) {
 
             stage 'archive'
                 archive 'dwca/*'
+                echo "home: [${env.JENKINS_HOME}]"
+                echo "build number: [${env.BUILD_NUMBER}]"
+                echo "job name: [${env.JOB_NAME}]"
                 sh "mv new.sha1 old.sha1"
         }
 }
