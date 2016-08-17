@@ -13,6 +13,7 @@ node {
             echo 'same file, nothing to do'
         } else {
             stage 'unpack'
+                sh "rm -rf dwca"
                 sh "unzip tmp.zip -d dwca"
 
             stage 'verify'
