@@ -79,7 +79,7 @@ def requestConversion() {
 
 def conversionComplete(submissionId) {
     try {
-        status = getSubmissionStatus(submissionId)
+        status = submissionStatus(submissionId)
         def driverStatusMatch = status =~ 'driverStatus"\\s+:\\s+"(RUNNING)"'
         driverStatusMatch ? true : false
     } catch (err) {
