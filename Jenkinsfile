@@ -4,10 +4,10 @@ node {
 
     stage 'configure'
         def matcher = readFile('README.md') =~ /url:(.*)$/
-        if (!matcher.matches()) {
+        def archiveUrl = matcher ? matcher[0][1] : null
+        if (!archiveUrl) {
             error('no archive url specified in README.md')
         }
-        def archiveUrl = matcher[0][1]
 
     stage 'download'
         sh "wget --quiet \"${archiveUrl}\" -O tmp.zip"
