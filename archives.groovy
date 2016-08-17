@@ -75,9 +75,9 @@ def requestConversion() {
     submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (submissionIdMatch.getCount() == 0) {
         error("submission failed: [${submissionReponse}])"
-        null
+        return null
     } else {
-        submissionIdMatch[0][1]
+        return submissionIdMatch[0][1]
     }
 }
 
