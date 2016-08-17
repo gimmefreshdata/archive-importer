@@ -29,7 +29,6 @@ def doImport(archiveUrl) {
     stage 'verify'
         if (!fileExists('dwca/meta.xml')) {
             error("failed to find file [meta.xml] in ${archiveUrl}")
-            false
         }
 
     stage 'dwc2parquet'
@@ -45,7 +44,6 @@ def doImport(archiveUrl) {
         } else {
             error("conversion to parquet failed for submission [${submissionId}]")
         }
-    true
 }
 
 def requestConversion() {
@@ -74,11 +72,9 @@ def requestConversion() {
     submissionResponse = readFile 'submissionResponse.json'
     submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (submissionIdMatch.getCount() == 0) {
-        error("submission failed: [${submissionReponse}])"
-        return null
-    } else {
-        return submissionIdMatch[0][1]
+        error("submission failed: [${submissionReponse}])")
     }
+    submissionIdMatch[0][1]
 }
 
 def conversionComplete(submissionId) {
@@ -88,7 +84,7 @@ def conversionComplete(submissionId) {
         driverStatusMatch.getCount() == 0
     } catch (err) {
         echo "failure in parquet conversion: [${err}]"
-        return false
+        false
     }
 }
 
