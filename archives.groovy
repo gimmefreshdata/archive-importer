@@ -33,7 +33,7 @@ def doImport(archiveUrl) {
         }
         metaXmlString = readFile metaFilename
         try {
-            new XmlSlurper().parseText(metaXmlString)
+            new XmlParser().parseText(metaXmlString)
         } catch (err) {
             error("failed to parse meta.xml due to [${err}]")
         }
