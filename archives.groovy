@@ -82,10 +82,9 @@ def requestConversion() {
     "spark.driver.memory" : "6g",
     "spark.task.maxFailures" : 1
   }
-}' > submissionResponse.json
+}'
 '''
-    sh sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost())
-    submissionResponse = readFile 'submissionResponse.json'
+    submissionResponse = sh sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost())
     def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (!submissionIdMatch) {
         error("submission failed: [${submissionReponse}])")
@@ -111,8 +110,7 @@ def getHost() {
 }
 
 def submissionStatus(submissionId) {
-    sh "curl http://${getHost()}:7077/v1/submissions/status/${submissionId} > submissionId.status"
-    readFile "${submissionId}.status"
+    sh "curl http://${getHost()}:7077/v1/submissions/status/${submissionId}"
 }
 
 def conversionSuccess(submissionId) {
