@@ -3,7 +3,7 @@ node {
     checkout scm
     sh '''ls'''
     def matcher = readFile('README.md') =~ 'url:(.*)$'
-    def archiveUrl = matcher[0][1]
+    def archiveUrl = matcher ? matcher[0][1] : null
     if (!archiveUrl) {
         fail('no archive url specified in README.md')
     }
