@@ -74,7 +74,7 @@ def requestConversion() {
     submissionResponse = readFile 'submissionResponse.json'
     submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (submissionIdMatch.getCount() == 0) {
-        error("submission failed: [${submissionReponse}]")"
+        error("submission failed: [${submissionReponse}])"
         null
     } else {
         submissionIdMatch[0][1]
