@@ -2,8 +2,13 @@ node {
     echo 'Hello from Pipeline'
     checkout scm
     sh '''ls'''
-    sh '''wget --quiet "https://www.dropbox.com/s/znvdammow4jiogj/NEON.zip?dl=1" -O tmp.zip'''
+    def matcher = readFile('README.md') =~ 'url:(.*)$'
+    def archiveUrl = matcher[0][1]
+    if (!archiveUrl) {
+        fail('no archive url specified in README.md')
+    }
+    sh "wget --quiet \"${archiveUrl}\" -O tmp.zip"
     sh '''unzip tmp.zip'''
-    sh '''cat meta.xml'''
+    fileExists 'meta.xml'
     echo 'Goodbye from pipeline'
 }
