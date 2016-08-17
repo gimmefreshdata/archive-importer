@@ -84,7 +84,7 @@ def requestConversion() {
 def conversionComplete(submissionId) {
     try {
         status = submissionStatus(submissionId)
-        def driverStatusMatch = status =~ 'driverStatus"\\s+:\\s+"(FINISHED)"'
+        def driverStatusMatch = status =~ 'driverState"\\s+:\\s+"(FINISHED)"'
         echo "checking status ${status}"
         driverStatusMatch ? true : false
     } catch (err) {
