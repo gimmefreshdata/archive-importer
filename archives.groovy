@@ -33,7 +33,10 @@ def doImport(archiveUrl) {
 
     stage 'dwc2parquet'
         submissionId = requestConversion()
-        waitUntil(conversionComplete(submissionId))
+        waitUntil {
+            conversionComplete(submissionId)
+        }
+
         if (conversionSuccess(submissionId)) {
             stage 'archive'
                 archive 'dwca/*'
