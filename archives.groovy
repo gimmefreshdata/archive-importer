@@ -31,12 +31,6 @@ def doImport(archiveUrl) {
         if (!fileExists(metaFilename)) {
             error("failed to find file [meta.xml] in ${archiveUrl}")
         }
-        metaXmlString = readFile metaFilename
-        try {
-            new XmlParser().parseText(metaXmlString)
-        } catch (err) {
-            error("failed to parse meta.xml due to [${err}]")
-        }
 
     stage 'dwc2parquet'
         submissionId = requestConversion()
@@ -46,10 +40,21 @@ def doImport(archiveUrl) {
         }
 
         if (conversionSuccess(submissionId)) {
+            stage 'verify parquet'
+                parquetDir = sh "ls -1 dwca | grep .*\\.parquet"
+                if (!fileExists("dwca/${parquetDir}/_SUCCESS")) {
+                    error("failed to find parquet files at [dwca/${parquetDir}]: did the conversion succeed?")
+                }
             stage 'archive'
                 archive 'dwca/**'
             stage 'link'
-                echo "should link to parquet files here"
+                dateString = new Date().format('YYYYMMdd')
+                jobName = env.JOB_NAME
+                symlinkName = "/mnt/data/repository/gbif-idigbio.parquet/source\=${jobName}/date\=${dateString}"
+                archiveDir = "file:///mnt/data/jenkins/jobs/${env.JOB_NAME}/builds/${env.JOB_NUMBER}/archive/dwca/"
+                parquetPath = "${archiveDir}${parquetDir}"
+                echo "should link to parquet file ${parquetPath} to ${symlinkName}"
+                sh "ln -s ${symlinkName} ${parquetPath}"
             stage 'notify'
                 sh "wget http://${getHost()}/updateAll"
         } else {
