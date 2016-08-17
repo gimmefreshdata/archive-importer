@@ -1,12 +1,6 @@
 node {
-    stage 'checkout'
-        checkout scm
-
     stage 'configure'
-        def archiveUrl = readFile('archiveName.txt')
-        if (!archiveUrl) {
-            error('no archive url specified in [archiveName.txt]')
-        }
+        def archiveUrl = 'https://www.dropbox.com/s/znvdammow4jiogj/NEON.zip?dl=1'
 
     stage 'download'
         sh "wget --quiet \"${archiveUrl}\" -O tmp.zip"
@@ -17,5 +11,4 @@ node {
 
     stage 'archive'
         archive 'dwca/*'
-
 }
