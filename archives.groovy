@@ -70,8 +70,8 @@ def requestConversion() {
 '''
     sh sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost())
     submissionResponse = readFile 'submissionResponse.json'
-    submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
-    if (submissionIdMatch.getCount() == 0) {
+    def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
+    if (!submissionIdMatch) {
         error("submission failed: [${submissionReponse}])")
     }
     submissionIdMatch[0][1]
@@ -80,8 +80,8 @@ def requestConversion() {
 def conversionComplete(submissionId) {
     try {
         status = getSubmissionStatus(submissionId)
-        driverStatusMatch = status =~ 'driverStatus"\\s+:\\s+"(RUNNING)"'
-        driverStatusMatch.getCount() == 0
+        def driverStatusMatch = status =~ 'driverStatus"\\s+:\\s+"(RUNNING)"'
+        driverStatusMatch ? true : false
     } catch (err) {
         echo "failure in parquet conversion: [${err}]"
         false
@@ -102,8 +102,8 @@ def conversionSuccess(submissionId) {
     try {
         sh "curl --silent http://${getHost()}:7077/v1/submissions/status/${submissionId} > ${submissionId}.status"
         def status = readFile "${submissionId}.status"
-        driverStatusMatch = status =~ 'driverStatus"\\s+:\\s+"(RUNNING)"'
-        driverStatusMatch.getCount() == 0
+        def taskFinishedMatcher = status =~ '.*(TASK_FINISHED).*'
+        taskFinishedMatcher ? true : false
     } catch (err) {
         echo "failure in parquet conversion: [${err}]"
         return false
