@@ -3,10 +3,9 @@ node {
         checkout scm
 
     stage 'configure'
-        def matcher = readFile('README.md') =~ "url:\\s*(http:.*)\\s*"
-        def archiveUrl = matcher ? matcher[0][1] : null
+        def archiveUrl = readFile('archiveName.txt')
         if (!archiveUrl) {
-            error('no archive url specified in README.md')
+            error('no archive url specified in [archiveName.txt]')
         }
 
     stage 'download'
