@@ -1,3 +1,4 @@
+#!groovy
 node {
     echo 'Hello from Pipeline'
     checkout scm
