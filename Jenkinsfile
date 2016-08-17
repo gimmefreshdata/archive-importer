@@ -1,6 +1,6 @@
 node {
     stage 'configure'
-        def archiveUrl = 'https://www.dropbox.com/s/znvdammow4jiogj/NEON.zip?dl=1'
+        def archiveUrl = 'http://www.inaturalist.org/observations/gbif-observations-dwca.zip'
 
     stage 'download'
         sh "wget --quiet \"${archiveUrl}\" -O tmp.zip"
