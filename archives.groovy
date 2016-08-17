@@ -84,7 +84,7 @@ def requestConversion() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()
+    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost())
     submissionResponse = sh([script: request, returnStdout: true])
     def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (!submissionIdMatch) {
