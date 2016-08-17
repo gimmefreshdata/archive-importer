@@ -5,7 +5,7 @@ node {
     def matcher = readFile('README.md') =~ 'url:(.*)$'
     def archiveUrl = matcher ? matcher[0][1] : null
     if (!archiveUrl) {
-        fail('no archive url specified in README.md')
+        error('no archive url specified in README.md')
     }
     sh "wget --quiet \"${archiveUrl}\" -O tmp.zip"
     sh '''unzip tmp.zip'''
