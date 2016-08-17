@@ -34,6 +34,7 @@ def doImport(archiveUrl) {
     stage 'dwc2parquet'
         submissionId = requestConversion()
         waitUntil {
+            echo 'checking status...'
             conversionComplete(submissionId)
         }
 
