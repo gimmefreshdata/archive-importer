@@ -5,7 +5,7 @@ def importIfChanged(archiveUrl) {
     echo "job name: [${env.JOB_NAME}]"
 
     stage 'download'
-        sh "wget --quiet \"${archiveUrl}\" -O tmp.zip"
+        sh "curl --silent \"${archiveUrl}\" > tmp.zip"
 
     stage 'changed'
         sh "sha1sum tmp.zip > new.sha1"
@@ -41,7 +41,7 @@ def doImport(archiveUrl) {
 
         if (conversionSuccess(submissionId)) {
             stage 'verify parquet'
-                parquetDir = sh "ls -1 dwca | grep .*\\.parquet"
+                parquetDir = sh([script: "ls -1 dwca | grep .*\\.parquet", returnStdout: true])
                 if (!fileExists("dwca/${parquetDir}/_SUCCESS")) {
                     error("failed to find parquet files at [dwca/${parquetDir}]: did the conversion succeed?")
                 }
@@ -84,7 +84,8 @@ def requestConversion() {
   }
 }'
 '''
-    submissionResponse = sh sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost())
+    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()
+    submissionResponse = sh([script: request, returnStdout: true])
     def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (!submissionIdMatch) {
         error("submission failed: [${submissionReponse}])")
@@ -110,7 +111,7 @@ def getHost() {
 }
 
 def submissionStatus(submissionId) {
-    sh "curl http://${getHost()}:7077/v1/submissions/status/${submissionId}"
+    sh([script: "curl http://${getHost()}:7077/v1/submissions/status/${submissionId}", returnStdout: true])
 }
 
 def conversionSuccess(submissionId) {
