@@ -50,7 +50,7 @@ def doImport(archiveUrl) {
             stage 'link'
                 dateString = new Date().format('YYYYMMdd')
                 jobName = env.JOB_NAME
-                symlinkName = "/mnt/data/repository/gbif-idigbio.parquet/source\=${jobName}/date\=${dateString}"
+                symlinkName = "/mnt/data/repository/gbif-idigbio.parquet/source\\=${jobName}/date\\=${dateString}"
                 archiveDir = "file:///mnt/data/jenkins/jobs/${env.JOB_NAME}/builds/${env.JOB_NUMBER}/archive/dwca/"
                 parquetPath = "${archiveDir}${parquetDir}"
                 echo "should link to parquet file ${parquetPath} to ${symlinkName}"
