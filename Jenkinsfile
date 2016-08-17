@@ -16,7 +16,7 @@ node {
                 sh "unzip tmp.zip -d dwca"
 
             stage 'verify'
-                if (!fileExists 'dwca/meta.xml') {
+                if (!fileExists('dwca/meta.xml')) {
                     error("failed to find file [meta.xml] in ${archiveUrl}")
                 }
 
