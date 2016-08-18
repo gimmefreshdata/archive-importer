@@ -47,7 +47,7 @@ def doImport(archiveUrl) {
                     error("failed to find parquet success file at [${parquetSuccessfile}]: did the conversion succeed?")
                 }
             stage 'archive'
-                archive 'dwca/*'
+                archive 'dwca/*.parquet/*'
             stage 'link'
                 jobName = env.JOB_NAME
                 sourceDir = "/mnt/data/repository/gbif-idigbio.parquet/source\\=${jobName}"
@@ -58,7 +58,7 @@ def doImport(archiveUrl) {
                 archiveDir = "/mnt/data/jenkins/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}/archive/dwca/"
                 parquetPath = "${archiveDir}${parquetDir}"
                 echo "should link to parquet file ${parquetPath} to ${symlinkName}"
-                sh "ln -s ${parquetPath} ${symlinkName}"
+                sh "ln -sFf ${parquetPath} ${symlinkName}"
             stage 'notify'
                 updateCmd = "wget http://${getHost()}/updateAll"
                 echo "skipping [${updateCmd}] for now..."
