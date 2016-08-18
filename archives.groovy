@@ -117,7 +117,7 @@ def getHost() {
 }
 
 def submissionStatus(submissionId) {
-    sh([script: "curl http://${getHost()}:7077/v1/submissions/status/${submissionId}", returnStdout: true])
+    sh([script: "curl --silent http://${getHost()}:7077/v1/submissions/status/${submissionId}", returnStdout: true])
 }
 
 def conversionSuccess(submissionId) {
