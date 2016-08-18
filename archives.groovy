@@ -56,7 +56,9 @@ def doImport(archiveUrl) {
                 echo "should link to parquet file ${parquetPath} to ${symlinkName}"
                 sh "ln -s ${symlinkName} ${parquetPath}"
             stage 'notify'
-                sh "wget http://${getHost()}/updateAll"
+                updateCmd = "wget http://${getHost()}/updateAll"
+                echo "skipping [${updateCmd}] for now..."
+                //sh " ${updateCmd}""
         } else {
             error("conversion to parquet failed for submission [${submissionId}]")
         }
