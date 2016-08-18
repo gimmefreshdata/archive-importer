@@ -53,7 +53,7 @@ def doImport(archiveUrl) {
                 sourceDir = "/mnt/data/repository/gbif-idigbio.parquet/source\\=${jobName}"
                 sh "mkdir -p ${sourceDir}"
                 
-                dateString = new Date().format('YYYYMMdd')
+                dateString = sh([script: 'date +%Y%m%d', returnStdout: true]).trim()
                 symlinkName = "${sourceDir}/date\\=${dateString}"
                 archiveDir = "file:///mnt/data/jenkins/jobs/${env.JOB_NAME}/builds/${env.JOB_NUMBER}/archive/dwca/"
                 parquetPath = "${archiveDir}${parquetDir}"
