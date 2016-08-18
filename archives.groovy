@@ -55,10 +55,10 @@ def doImport(archiveUrl) {
                 
                 dateString = sh([script: 'date +%Y%m%d', returnStdout: true]).trim()
                 symlinkName = "${sourceDir}/date\\=${dateString}"
-                archiveDir = "file:///mnt/data/jenkins/jobs/${env.JOB_NAME}/builds/${env.JOB_NUMBER}/archive/dwca/"
+                archiveDir = "/mnt/data/jenkins/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}/archive/dwca/"
                 parquetPath = "${archiveDir}${parquetDir}"
                 echo "should link to parquet file ${parquetPath} to ${symlinkName}"
-                sh "ln -s ${symlinkName} ${parquetPath}"
+                sh "ln -s ${parquetPath} ${symlinkName}"
             stage 'notify'
                 updateCmd = "wget http://${getHost()}/updateAll"
                 echo "skipping [${updateCmd}] for now..."
