@@ -41,9 +41,10 @@ def doImport(archiveUrl) {
 
         if (conversionSuccess(submissionId)) {
             stage 'verify parquet'
-                parquetDir = sh([script: "ls -1 dwca | grep .*\\.parquet", returnStdout: true])
-                if (!fileExists("dwca/${parquetDir}/_SUCCESS")) {
-                    error("failed to find parquet files at [dwca/${parquetDir}]: did the conversion succeed?")
+                parquetDir = sh([script: "ls -1 dwca | grep .*\\.parquet", returnStdout: true]).trim()
+                parquetSuccessfile = "dwca/${parquetDir}/_SUCCESS"
+                if (!fileExists(parquetSuccessfile)) {
+                    error("failed to find parquet success file at [${parquetSuccessfile}]: did the conversion succeed?")
                 }
             stage 'archive'
                 archive 'dwca/**'
