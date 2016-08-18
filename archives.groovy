@@ -5,7 +5,7 @@ def importIfChanged(archiveUrl) {
     echo "job name: [${env.JOB_NAME}]"
 
     stage 'download'
-        sh "curl --silent \"${archiveUrl}\" > tmp.zip"
+        sh "wget --quiet \"${archiveUrl}\" -O tmp.zip"
 
     stage 'changed'
         sh "sha1sum tmp.zip > new.sha1"
