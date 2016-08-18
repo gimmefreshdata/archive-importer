@@ -47,7 +47,7 @@ def doImport(archiveUrl) {
                     error("failed to find parquet success file at [${parquetSuccessfile}]: did the conversion succeed?")
                 }
             stage 'archive'
-                archive 'dwca/**'
+                archive 'dwca/*'
             stage 'link'
                 jobName = env.JOB_NAME
                 sourceDir = "/mnt/data/repository/gbif-idigbio.parquet/source\\=${jobName}"
