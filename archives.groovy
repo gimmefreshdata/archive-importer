@@ -69,15 +69,14 @@ def doImport(archiveUrl) {
 def updateMonitors() {
 	submissionId = requestUpdate()
         waitUntil {
-            echo ‘waiting to complete…’
+            echo 'waiting to complete...'
             submissionComplete(submissionId)
         }
 
 	if (submissionSuccess(submissionId)) {
-	  	echo ‘succeeded to update monitors’
-		build ‘notify subscribers’
+	  	echo 'succeeded to update monitors'
 	} else {
-		error ‘failed to update monitors’
+		error 'failed to update monitors'
 	}
 }
 
