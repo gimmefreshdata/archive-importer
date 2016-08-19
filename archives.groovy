@@ -36,10 +36,10 @@ def doImport(archiveUrl) {
         submissionId = requestConversion()
         waitUntil {
             echo 'checking status...'
-            conversionComplete(submissionId)
+            submissionComplete(submissionId)
         }
 
-        if (conversionSuccess(submissionId)) {
+        if (submissionSuccess(submissionId)) {
             stage 'verify parquet'
                 parquetDir = sh([script: "ls -1 dwca | grep .*\\.parquet", returnStdout: true]).trim()
                 parquetSuccessfile = "dwca/${parquetDir}/_SUCCESS"
@@ -66,6 +66,56 @@ def doImport(archiveUrl) {
         }
 }
 
+def updateMonitors() {
+	submissionId = requestUpdate()
+        waitUntil {
+            echo ‘waiting to complete…’
+            submissionComplete(submissionId)
+        }
+
+	if (submissionSuccess(submissionId)) {
+	  	echo ‘succeeded to update monitors’
+		build ‘notify subscribers’
+	} else {
+		error ‘failed to update monitors’
+	}
+}
+
+def requestUpdate() {
+  sparkRequest = '''curl -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
+"action" : "CreateSubmissionRequest",
+  "appArgs" : [ "-f", "cassandra","-c","/home/int/data/gbif-idigbio.parquet","-t", "/home/int/data/traitbank/*.csv", "-a", "true" ],
+  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-1.5.4.jar",
+  "clientSparkVersion" : "1.6.1",
+  "environmentVariables" : {
+    "SPARK_ENV_LOADED" : "1"
+  },
+  "mainClass" : "OccurrenceCollectionGenerator",
+  "sparkProperties" : {
+    "spark.driver.supervise" : "false",
+    "spark.app.name" : "updateAll",
+    "spark.eventLog.enabled": "true",
+    "spark.submit.deployMode" : "cluster",
+    "spark.master" : "mesos://api.effechecka.org:7077",
+    "spark.executor.memory" : "32g",
+    "spark.driver.memory" : "8g",
+    "spark.task.maxFailures" : 1  
+  }
+}'
+'''
+    request = sparkRequest.replace("@@HOST@@", getHost())
+    submitRequest(request)
+}
+
+def submitRequest(request) {
+    submissionResponse = sh([script: request, returnStdout: true])
+    def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
+    if (!submissionIdMatch) {
+        error("submission failed: [${submissionReponse}])")
+    }
+    submissionIdMatch[0][1]
+}
+
 def requestConversion() {
   sparkRequest = '''curl -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
   "action" : "CreateSubmissionRequest",
@@ -89,15 +139,10 @@ def requestConversion() {
 }'
 '''
     request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost())
-    submissionResponse = sh([script: request, returnStdout: true])
-    def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
-    if (!submissionIdMatch) {
-        error("submission failed: [${submissionReponse}])")
-    }
-    submissionIdMatch[0][1]
+    submitRequest(request)
 }
 
-def conversionComplete(submissionId) {
+def submissionComplete(submissionId) {
     try {
         status = submissionStatus(submissionId)
         def driverStatusMatch = status =~ 'driverState"\\s+:\\s+"(FINISHED)"'
@@ -118,7 +163,7 @@ def submissionStatus(submissionId) {
     sh([script: "curl --silent http://${getHost()}:7077/v1/submissions/status/${submissionId}", returnStdout: true])
 }
 
-def conversionSuccess(submissionId) {
+def submissionSuccess(submissionId) {
     try {
         status = submissionStatus(submissionId)
         def taskFinishedMatcher = status =~ '.*(TASK_FINISHED).*'
