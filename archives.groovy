@@ -19,11 +19,19 @@ def importIfChanged(archiveUrl) {
             }
 
         }
+
+    stage 'clean'
+      sh "rm -rf tmp.zip"
+      removeUnpackedArchive()
+}
+
+def removeUnpackedArchive() {
+  sh "rm -rf dwca"
 }
 
 def doImport(archiveUrl) {
     stage 'unpack'
-        sh "rm -rf dwca"
+        removeUnpackedArchive()
         sh "unzip tmp.zip -d dwca"
 
     stage 'verify'
