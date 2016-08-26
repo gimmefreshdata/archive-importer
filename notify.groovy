@@ -4,5 +4,10 @@ node {
     sh "curl --verbose \"http://api.effechecka.org/notifyAll?addedAfter=$dateString\""
     
     stage 'cleanup dead links'
-    sh "find /mnt/data/repository/gbif-idigbio.parquet -xtype l | xargs rm"
+    brokenLinks = sh([script: "find /mnt/data/repository/gbif-idigbio.parquet -xtype l", returnStdout: true]).split('\n')
+
+    echo "found [${brokenLinks.size}] broken links"
+    brokenLinks.each {
+      brokenLink -> sh "rm ${brokenLink.trim}"
+    }
 }
