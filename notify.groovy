@@ -6,8 +6,8 @@ node {
     stage 'cleanup dead links'
     brokenLinks = sh([script: "find /mnt/data/repository/gbif-idigbio.parquet -xtype l", returnStdout: true]).split('\n')
 
-    echo "found [${brokenLinks.size}] broken links"
+    echo "found [${brokenLinks.size()}] broken links"
     brokenLinks.each {
-      brokenLink -> sh "rm ${brokenLink.trim}"
+      brokenLink -> if (brokenLink.size() > 0) { sh "rm ${brokenLink.trim}" }
     }
 }
