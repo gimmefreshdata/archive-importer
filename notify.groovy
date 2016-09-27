@@ -7,6 +7,6 @@ node {
     brokenLinks = sh([script: "find /mnt/data/repository/gbif-idigbio.parquet -xtype l", returnStdout: true]).split('\n')
 
     for (brokenLink in brokenLinks) {
-      if (brokenLink.size() > 0) { sh "rm ${brokenLink.trim}" }
+      if (brokenLink.size() > 0) { sh "rm ${brokenLink.trim()}" }
     }
 }
