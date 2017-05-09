@@ -115,9 +115,8 @@ def requestUpdate() {
 def submitRequest(request) {
     echo "submitting request ${request}" 
     submissionResponse = sh([script: request, returnStdout: true])
-    if (!binding.variables.containsKey("submissionResponse")) {
-	error("submission failed: likely cause: too many jobs running on cluster");    
-    } 
+    // for some reason, submissionResponse is not defined if too many jobs are running and request is denied
+    // see https://github.com/gimmefreshdata/source-idigbio/issues/3
     def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (!submissionIdMatch) {
         error("submission failed: [${submissionReponse}])")
