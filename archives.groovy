@@ -123,7 +123,7 @@ def submitRequest(request) {
 }
 
 def requestConversion() {
-  sparkRequest = '''curl --trace --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
+  sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
   "action" : "CreateSubmissionRequest",
   "appArgs" : [ "file:///mnt/data/jenkins/workspace/@@JOB_NAME@@/dwca/meta.xml" ],
   "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-1.5.5.jar",
