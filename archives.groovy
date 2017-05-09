@@ -115,6 +115,9 @@ def requestUpdate() {
 def submitRequest(request) {
     echo "submitting request ${request}" 
     submissionResponse = sh([script: request, returnStdout: true])
+    if (!binding.variables.containsKey("submissionResponse")) {
+	error("submission failed: likely cause: too many jobs running on cluster");    
+    } 
     def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
     if (!submissionIdMatch) {
         error("submission failed: [${submissionReponse}])")
