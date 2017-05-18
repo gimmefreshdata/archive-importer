@@ -111,7 +111,7 @@ def requestUpdate() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@, idigbioSparkVersion)
+    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", idigbioSparkVersion)
     submitRequest(request)
 }
 
