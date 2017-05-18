@@ -1,5 +1,7 @@
 // see https://github.com/bio-guoda/idigbio-spark
-idigbioSparkJobVersion = "1.5.6"
+def idigbioSparkJobVersion() {
+  "1.5.6"
+}
 
 def importIfChanged(archiveUrl) {
 
@@ -111,7 +113,7 @@ def requestUpdate() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", idigbioSparkJobVersion)
+    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", idigbioSparkJobVersion())
     submitRequest(request)
 }
 
@@ -149,7 +151,7 @@ def requestConversion() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()).replace("@@VERSION@@", idigbioSparkJobVersion)
+    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()).replace("@@VERSION@@", idigbioSparkJobVersion())
     submitRequest(request)
 }
 
