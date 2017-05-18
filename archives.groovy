@@ -1,5 +1,5 @@
 // see https://github.com/bio-guoda/idigbio-spark
-idigioSparkJobVersion = "1.5.6"
+idigbioSparkJobVersion = "1.5.6"
 
 def importIfChanged(archiveUrl) {
 
