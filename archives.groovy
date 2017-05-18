@@ -1,3 +1,6 @@
+// see https://github.com/bio-guoda/idigbio-spark
+idigioSparkJobVersion = "1.5.6"
+
 def importIfChanged(archiveUrl) {
 
     echo "home: [${env.JENKINS_HOME}]"
@@ -90,7 +93,7 @@ def requestUpdate() {
   sparkRequest = '''curl -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
 "action" : "CreateSubmissionRequest",
   "appArgs" : [ "-f", "cassandra","-c","/home/int/data/gbif-idigbio.parquet","-t", "/home/int/data/traitbank/*.csv", "-a", "true" ],
-  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-1.5.5.jar",
+  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-@@VERSION@@.jar",
   "clientSparkVersion" : "1.6.1",
   "environmentVariables" : {
     "SPARK_ENV_LOADED" : "1"
@@ -108,7 +111,7 @@ def requestUpdate() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@HOST@@", getHost())
+    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@, idigbioSparkVersion)
     submitRequest(request)
 }
 
@@ -128,7 +131,7 @@ def requestConversion() {
   sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
   "action" : "CreateSubmissionRequest",
   "appArgs" : [ "file:///mnt/data/jenkins/workspace/@@JOB_NAME@@/dwca/meta.xml" ],
-  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-1.5.6.jar",
+  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-@@VERSION@@.jar",
   "clientSparkVersion" : "1.6.1",
   "environmentVariables" : {
     "SPARK_ENV_LOADED" : "1"
@@ -146,7 +149,7 @@ def requestConversion() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost())
+    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()).replace("@@VERSION@@", idigbioSparkVersion)
     submitRequest(request)
 }
 
