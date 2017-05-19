@@ -108,7 +108,7 @@ def requestUpdate() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", "1.5.6")
+    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", "latest")
     submitRequest(request)
 }
 
@@ -146,7 +146,7 @@ def requestConversion() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()).replace("@@VERSION@@", "1.5.6")
+    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()).replace("@@VERSION@@", "latest")
     submitRequest(request)
 }
 
