@@ -128,8 +128,8 @@ def requestConversion() {
   sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
   "action" : "CreateSubmissionRequest",
   "appArgs" : [ "file:///mnt/data/jenkins/workspace/@@JOB_NAME@@/dwca/meta.xml" ],
-  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-@@VERSION@@.jar",
-  "clientSparkVersion" : "1.6.1",
+  "appResource" : "hdfs:/guoda/lib/iDigBio-LD-assembly-@@VERSION@@.jar",
+  "clientSparkVersion" : "2.1.1",
   "environmentVariables" : {
     "SPARK_ENV_LOADED" : "1"
   },
@@ -164,7 +164,7 @@ def submissionComplete(submissionId) {
 
 
 def getHost() {
-    "api.effechecka.org"
+    "mesos07.acis.ufl.edu"
 }
 
 def submissionStatus(submissionId) {
