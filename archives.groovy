@@ -128,7 +128,7 @@ def requestConversion() {
   sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
   "action" : "CreateSubmissionRequest",
   "appArgs" : [ "file:///mnt/data/jenkins/workspace/@@JOB_NAME@@/dwca/meta.xml" ],
-  "appResource" : "hdfs:/guoda/lib/iDigBio-LD-assembly-@@VERSION@@.jar",
+  "appResource" : "hdfs://localhost:9000/guoda/lib/iDigBio-LD-assembly-@@VERSION@@.jar",
   "clientSparkVersion" : "2.1.1",
   "environmentVariables" : {
     "SPARK_ENV_LOADED" : "1"
