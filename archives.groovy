@@ -89,19 +89,25 @@ def updateMonitors() {
 def requestUpdate() {
   sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
 "action" : "CreateSubmissionRequest",
-  "appArgs" : [ "-f", "hdfs","-o", "hdfs:///guoda/data/monitor/","-c","hdfs:///guoda/data/gbif-idigbio.parquet","-t","hdfs:///guoda/data/traitbank/*.csv", "-a", "true" ],
+  "appArgs" : [ "-f", "hdfs","-o", "\\"hdfs:///guoda/data/monitor/\\"","-c","\\"hdfs:///guoda/data/gbif-idigbio.parquet\\"","-t","\\"hdfs:///guoda/data/traitbank/*.csv\\"", "-a", "true" ],
   "appResource" : "@@JOB_JAR@@",
-  "clientSparkVersion" : "1.6.1",
+  "clientSparkVersion" : "2.0.1",
   "environmentVariables" : {
-    "SPARK_ENV_LOADED" : "1"
+    "SPARK_ENV_LOADED" : "1",
+    "HADOOP_HOME" : "/usr/lib/hadoop",
+    "HADOOP_PREFIX" : "/usr/lib/hadoop",
+    "HADOOP_LIBEXEC_DIR" : "/usr/lib/hadoop/libexec",
+    "HADOOP_CONF_DIR" : "/etc/hadoop/conf",
+    "HADOOP_USER_NAME" : "hdfs"
   },
   "mainClass" : "OccurrenceCollectionGenerator",
   "sparkProperties" : {
     "spark.driver.supervise" : "false",
+    "spark.mesos.executor.home" : "/opt/spark/latest",
     "spark.app.name" : "updateAll",
     "spark.eventLog.enabled": "true",
     "spark.submit.deployMode" : "cluster",
-    "spark.master" : "mesos://api.effechecka.org:7077",
+    "spark.master" : "mesos://@@HOST@@:7077",
     "spark.executor.memory" : "32g",
     "spark.driver.memory" : "8g",
     "spark.task.maxFailures" : 1  
