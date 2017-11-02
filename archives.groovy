@@ -90,7 +90,7 @@ def requestUpdate() {
   sparkRequest = '''curl -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
 "action" : "CreateSubmissionRequest",
   "appArgs" : [ "-f", "hdfs","-o", "hdfs:///guoda/data/monitor/","-c","\"hdfs:///guoda/data/gbif-idigbio.parquet\"","-t","\"hdfs:///guoda/data/traitbank/*.csv\"", "-a", "true" ],
-  "appResource" : "https://s3-us-west-2.amazonaws.com/guoda/idigbio-spark/iDigBio-LD-assembly-@@VERSION@@.jar",
+  "appResource" : "@@JOB_JAR@@@",
   "clientSparkVersion" : "1.6.1",
   "environmentVariables" : {
     "SPARK_ENV_LOADED" : "1"
@@ -108,7 +108,7 @@ def requestUpdate() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", "1.5.8")
+    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@JOB_JAR@@", getJobJar())
     submitRequest(request)
 }
 
@@ -128,7 +128,7 @@ def requestConversion() {
   sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
   "action" : "CreateSubmissionRequest",
   "appArgs" : [ "file:///mnt/data/jenkins/workspace/@@JOB_NAME@@/dwca/meta.xml" ],
-  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-@@VERSION@@.jar",
+  "appResource" : "@@JOB_JAR@@",
   "clientSparkVersion" : "1.6.1",
   "environmentVariables" : {
     "SPARK_ENV_LOADED" : "1"
@@ -146,7 +146,7 @@ def requestConversion() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()).replace("@@VERSION@@", "latest")
+    request = sparkRequest.replace("@@JOB_NAME@@", env.JOB_NAME).replace("@@HOST@@", getHost()).replace("@@JOB_JAR@@", getJobJar())
     submitRequest(request)
 }
 
@@ -165,6 +165,10 @@ def submissionComplete(submissionId) {
 
 def getHost() {
     "mesos07.acis.ufl.edu"
+}
+
+def getJobJar() {
+    "https://s3-us-west-2.amazonaws.com/guoda/idigbio-spark/iDigBio-LD-assembly-1.5.8.jar"
 }
 
 def submissionStatus(submissionId) {
