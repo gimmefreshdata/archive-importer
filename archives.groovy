@@ -105,7 +105,7 @@ def requestUpdate() {
     "spark.driver.supervise" : "false",
     "spark.mesos.executor.home" : "/opt/spark/latest",
     "spark.app.name" : "updateAll",
-    "spark.eventLog.enabled": "true",
+    "_spark.eventLog.enabled": "true",
     "spark.submit.deployMode" : "cluster",
     "spark.master" : "mesos://@@HOST@@:7077",
     "spark.executor.memory" : "32g",
