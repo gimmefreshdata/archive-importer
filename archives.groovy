@@ -126,7 +126,7 @@ def submitRequest(request) {
       submissionSuccess = (submissionResponse =~ 'success"\\s+:\\s+(true)') ? true : false
       echo "continuing with success [${submissionSuccess}]"
       if (submissionSuccess) {
-        submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
+        def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
         submissionIdMatch[0][1]
       } else {
         echo "no success, try again..."
