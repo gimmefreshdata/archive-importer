@@ -115,6 +115,7 @@ def requestUpdate() {
 def submitRequest(request) {
     echo "submitting request ${request}" 
     submissionResponse = sh([script: request, returnStdout: true])
+    echo "response ${submissionResponse}"
     // for some reason, submissionResponse is not defined if too many jobs are running and request is denied
     // see https://github.com/gimmefreshdata/source-idigbio/issues/3
     def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
