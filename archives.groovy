@@ -89,7 +89,7 @@ def updateMonitors() {
 def requestUpdate() {
   sparkRequest = '''curl -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
 "action" : "CreateSubmissionRequest",
-  "appArgs" : [ "-f", "cassandra","-c","/home/int/data/gbif-idigbio.parquet","-t", "/home/int/data/traitbank/*.csv", "-a", "true" ],
+  "appArgs" : [ "-f", "hdfs","-o", "hdfs:///guoda/data/monitor/","-c","\"hdfs:///guoda/data/gbif-idigbio.parquet\"","-t","\"hdfs:///guoda/data/traitbank/*.csv\"", "-a", "true" ],
   "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-@@VERSION@@.jar",
   "clientSparkVersion" : "1.6.1",
   "environmentVariables" : {
@@ -108,7 +108,7 @@ def requestUpdate() {
   }
 }'
 '''
-    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", "latest")
+    request = sparkRequest.replace("@@HOST@@", getHost()).replace("@@VERSION@@", "1.5.8")
     submitRequest(request)
 }
 
