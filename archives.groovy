@@ -89,7 +89,7 @@ def updateMonitors() {
 def requestUpdate() {
   sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
 "action" : "CreateSubmissionRequest",
-  "appArgs" : [ "-f", "hdfs","-o", "hdfs:///guoda/data/monitor/","-c","\"hdfs:///guoda/data/gbif-idigbio.parquet\"","-t","\"hdfs:///guoda/data/traitbank/*.csv\"", "-a", "true" ],
+  "appArgs" : [ "-f", "hdfs","-o", "hdfs:///guoda/data/monitor/","-c","hdfs:///guoda/data/gbif-idigbio.parquet"","-t","hdfs:///guoda/data/traitbank/*.csv", "-a", "true" ],
   "appResource" : "@@JOB_JAR@@",
   "clientSparkVersion" : "1.6.1",
   "environmentVariables" : {
