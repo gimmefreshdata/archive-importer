@@ -119,18 +119,19 @@ def requestUpdate() {
 }
 
 def submitRequest(request) {
-    echo "submitting request ${request}" 
-    submissionResponse = sh([script: request, returnStdout: true])
-    echo "inspecting submission response [${submissionResponse}]"
-    submissionSuccess = (submissionResponse =~ 'success"\\s+:\\s+(true)') ? true : false
-    echo "continuing with success [${submissionSuccess}]"
-    if (submissionSuccess) {
-      submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
-      submissionIdMatch[0][1]
-    } else {
-      echo "no success"
-      error("submission unsuccessful")
-      false
+    waitUntil {
+      echo "submitting request ${request}" 
+      submissionResponse = sh([script: request, returnStdout: true])
+      echo "inspecting submission response [${submissionResponse}]"
+      submissionSuccess = (submissionResponse =~ 'success"\\s+:\\s+(true)') ? true : false
+      echo "continuing with success [${submissionSuccess}]"
+      if (submissionSuccess) {
+        submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
+        submissionIdMatch[0][1]
+      } else {
+        echo "no success, try again..."
+        false
+      }
     }
 }
 
