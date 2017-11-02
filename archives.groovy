@@ -128,7 +128,8 @@ def submitRequest(request) {
       submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
       submissionIdMatch[0][1]
     } else {
-      error("submission unsuccessful: [${submissionReponse}])")
+      echo "no success"
+      error("submission unsuccessful")
       false
     }
 }
