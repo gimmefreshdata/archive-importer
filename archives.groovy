@@ -166,7 +166,7 @@ def submissionComplete(submissionId) {
         echo "checking status ${status}"
         driverStatusMatch ? false : true
     } catch (err) {
-        echo "failure in parquet conversion: [${err}]"
+        echo "failure in job: [${err}]"
         false
     }
 }
