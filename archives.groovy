@@ -121,7 +121,7 @@ def requestUpdate() {
 def submitRequest(request) {
     echo "submitting request ${request}" 
     submissionResponse = sh([script: request, returnStdout: true])
-    echo "response [${submissionResponse}]"
+    echo "inspecting response [${submissionResponse}]"
     def submissionSuccess = submissionResponse =~ 'success"\\s+:\\+(true)'
     if (submissionSuccess) {
       def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
