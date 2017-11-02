@@ -119,6 +119,7 @@ def requestUpdate() {
 }
 
 def submitRequest(request) {
+    submissionId = "no:id"
     waitUntil {
       echo "submitting request ${request}" 
       submissionResponse = sh([script: request, returnStdout: true])
@@ -127,12 +128,14 @@ def submitRequest(request) {
       echo "continuing with success [${submissionSuccess}]"
       if (submissionSuccess) {
         def submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
-        submissionIdMatch[0][1]
+        submissionId = submissionIdMatch[0][1]
+        true
       } else {
         echo "no success, try again..."
         false
       }
     }
+    submissionId
 }
 
 def requestConversion() {
