@@ -108,7 +108,7 @@ def requestUpdate() {
     "_spark.eventLog.enabled": "true",
     "spark.submit.deployMode" : "cluster",
     "spark.master" : "mesos://@@HOST@@:7077",
-    "spark.executor.memory" : "32g",
+    "spark.executor.memory" : "10g",
     "spark.driver.memory" : "8g",
     "spark.task.maxFailures" : 1  
   }
