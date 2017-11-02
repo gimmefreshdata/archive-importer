@@ -90,7 +90,7 @@ def requestUpdate() {
   sparkRequest = '''curl -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
 "action" : "CreateSubmissionRequest",
   "appArgs" : [ "-f", "hdfs","-o", "hdfs:///guoda/data/monitor/","-c","\"hdfs:///guoda/data/gbif-idigbio.parquet\"","-t","\"hdfs:///guoda/data/traitbank/*.csv\"", "-a", "true" ],
-  "appResource" : "file:///home/int/jobs/iDigBio-LD-assembly-@@VERSION@@.jar",
+  "appResource" : "https://s3-us-west-2.amazonaws.com/guoda/idigbio-spark/iDigBio-LD-assembly-@@VERSION@@.jar",
   "clientSparkVersion" : "1.6.1",
   "environmentVariables" : {
     "SPARK_ENV_LOADED" : "1"
