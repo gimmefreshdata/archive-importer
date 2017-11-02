@@ -162,6 +162,7 @@ def requestConversion() {
 def submissionComplete(submissionId) {
     try {
         status = submissionStatus(submissionId)
+        echo "status: [${status}]"
         def driverStatusMatch = status =~ 'driverState"\\s+:\\s+"((QUEUED)|(RUNNING))"'
         echo "checking status ${status}"
         driverStatusMatch ? false : true
