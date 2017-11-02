@@ -123,7 +123,7 @@ def submitRequest(request) {
     submissionResponse = sh([script: request, returnStdout: true])
     echo "inspecting submission response [${submissionResponse}]"
     submissionSuccess = (submissionResponse =~ 'success"\\s+:\\s+(true)') ? true : false
-    echo "continuing..."
+    echo "continuing with success [${submissionSuccess}]"
     if (submissionSuccess) {
       submissionIdMatch = submissionResponse =~ 'submissionId"\\s+:\\s+"(.+)"'
       submissionIdMatch[0][1]
