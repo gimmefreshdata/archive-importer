@@ -164,7 +164,7 @@ def submissionComplete(submissionId) {
 
 
 def getHost() {
-    "api.effechecka.org"
+    "mesos07.acis.ufl.edu"
 }
 
 def submissionStatus(submissionId) {
