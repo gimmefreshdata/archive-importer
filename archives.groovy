@@ -87,7 +87,7 @@ def updateMonitors() {
 }
 
 def requestUpdate() {
-  sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
+  sparkRequest = '''curl --verbose --max-time 60 -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
 "action" : "CreateSubmissionRequest",
   "appArgs" : [ "-f", "hdfs","-o", "\\"hdfs:///guoda/data/monitor/\\"","-c","\\"hdfs:///guoda/data/gbif-idigbio.parquet\\"","-t","\\"hdfs:///guoda/data/traitbank/*.csv\\"", "-a", "true" ],
   "appResource" : "@@JOB_JAR@@",
@@ -139,7 +139,7 @@ def submitRequest(request) {
 }
 
 def requestConversion() {
-  sparkRequest = '''curl --verbose -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
+  sparkRequest = '''curl --verbose --max-time 60 -X POST http://@@HOST@@:7077/v1/submissions/create --header "Content-Type:application/json;charset=UTF-8" --data '{
   "action" : "CreateSubmissionRequest",
   "appArgs" : [ "file:///mnt/data/jenkins/workspace/@@JOB_NAME@@/dwca/meta.xml" ],
   "appResource" : "@@JOB_JAR@@",
@@ -187,7 +187,7 @@ def getJobJar() {
 }
 
 def submissionStatus(submissionId) {
-    sh([script: "curl --silent http://${getHost()}:7077/v1/submissions/status/${submissionId}", returnStdout: true])
+    sh([script: "curl --silent --max-time 60 http://${getHost()}:7077/v1/submissions/status/${submissionId}", returnStdout: true])
 }
 
 def submissionSuccess(submissionId) {
