@@ -183,7 +183,7 @@ def getHost() {
 }
 
 def getJobJar() {
-    "https://s3-us-west-2.amazonaws.com/guoda/idigbio-spark/iDigBio-LD-assembly-1.5.8.jar"
+    "https://github.com/bio-guoda/idigbio-spark/releases/download/0.0.1/iDigBio-LD-assembly-1.5.8.jar"
 }
 
 def submissionStatus(submissionId) {
